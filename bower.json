@@ -16,5 +16,8 @@
   "homepage": "https://github.com/vuza/hi",
   "moduleType": [
     "amd"
-  ]
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.22"
+  }
 }
