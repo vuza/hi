@@ -18,6 +18,8 @@
     "amd"
   ],
   "dependencies": {
-    "requirejs": "~2.1.22"
+    "requirejs": "~2.1.22",
+    "socket.io-p2p": "https://github.com/socketio/socket.io-p2p.git#2.0.1",
+    "socket.io-client": "~1.4.5"
   }
 }
