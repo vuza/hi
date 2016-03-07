@@ -1,0 +1,20 @@
+{
+  "name": "hi",
+  "description": "P2P WebRTC videochat",
+  "main": "index.js",
+  "authors": [
+    "vuza"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "WebRTC",
+    "Sockets",
+    "Video",
+    "Chat",
+    "P2P"
+  ],
+  "homepage": "https://github.com/vuza/hi",
+  "moduleType": [
+    "amd"
+  ]
+}
