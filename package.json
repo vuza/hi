@@ -4,7 +4,9 @@
   "description": "P2P WebRTC videochat",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "bower install"
   },
   "repository": {
     "type": "git",

@@ -1,3 +1,6 @@
 {
-  "directory" : "public/scripts/vendor/bower/"
+  "directory" : "public/scripts/vendor/bower/",
+  "scripts": {
+    "postinstall": "./bower-postinstall.sh"
+  }
 }
