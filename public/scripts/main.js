@@ -2,10 +2,18 @@ require.config({
     baseUrl: '/scripts/',
     paths: {
         io: 'vendor/bower/socket.io-client/socket.io',
-        P2P: 'vendor/bower/socket.io-p2p/umd-version'
+        Peer: 'vendor/bower/simple-peer/umd-version'
     },
-    deps: ['client'],
-    callback: function (client) {
-        client.run();
+    deps: ['client', 'helper'],
+    callback: function (client, helper) {
+        var room = helper.getUrlParam('id'),
+            initiator = false;
+
+        if(!room) {
+            room = helper.createRoom();
+            initiator = true;
+        }
+
+        client.run({initiator: initiator, room: room});
     }
 });

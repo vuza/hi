@@ -1,14 +1,33 @@
-define(['io', 'P2P'], function(io, P2P){
+define(['io', 'Peer'], function(io, Peer){
     return {
-        run: function(){
-            var socket = io('http://localhost:3001'); //TODO => config
-            var p2p = new P2P(socket, {}, function(){
-                p2p.emit('peer-msg', 'HI');
-            });
+        run: function(opt){
+            opt = opt || {};
 
-            p2p.on('peer-msg', function (data) {
-                console.log('From a peer %s', data);
-            });
+            var room = opt.room,
+                initiator = opt.initiator;
+
+
+            if (!navigator.getUserMedia)
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+            navigator.getUserMedia({ audio: false, video: true },
+                function(stream){
+                    var peer = new Peer({initiator: initiator, stream: stream});
+
+                    var socket = io('http://localhost:3001'); //TODO => config
+
+                    socket.on('signal', function(data) {
+                        console.log('signal via socket');
+                    });
+
+                    peer.on('signal', function(data) {
+                        socket.emit('myPeer', {room: room, signal: data});
+                    });
+                },
+                function(e) {
+                    console.log(e);
+                }
+            );
         }
     };
 });
