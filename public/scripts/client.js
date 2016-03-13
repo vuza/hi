@@ -14,13 +14,14 @@ define(['io', 'Peer'], function(io, Peer){
                 function(stream){
                     var peer = new Peer({initiator: initiator, stream: stream});
 
-                    var socket = io('http://localhost:3001'); //TODO => config
+                    var socket = io('https://alagoda.at:3000', {secure: true}); //TODO => config
 
                     socket.on('signal', function(data) {
                         console.log('signal via socket');
                     });
 
                     peer.on('signal', function(data) {
+			console.log('sending signal');
                         socket.emit('myPeer', {room: room, signal: data});
                     });
                 },
