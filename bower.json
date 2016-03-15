@@ -21,6 +21,7 @@
     "requirejs": "~2.1.22",
     "socket.io-client": "~1.4.5",
     "socket": "https://github.com/nkzawa/socket.io-stream",
-    "simple-peer": "https://github.com/feross/simple-peer.git#6.0.2"
+    "simple-peer": "https://github.com/feross/simple-peer.git#6.0.2",
+    "jquery": "~2.2.1"
   }
 }

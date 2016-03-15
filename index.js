@@ -1,55 +1,65 @@
 var express = require('express'),
     https = require('https'),
+    http = require('http'),
     fs = require('fs'),
+    config = require('./config'),
     app = express();
 
 var u1 = {},
     u2 = {};
 
-var credentials = {key: fs.readFileSync('/etc/letsencrypt/live/hi.alagoda.at/privkey.pem', 'utf8'), cert: fs.readFileSync('/etc/letsencrypt/live/hi.alagoda.at/fullchain.pem', 'utf8')};
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(3000);
+var server;
+if(config.tls.on) {
+    var credentials = {
+        key: fs.readFileSync(config.tls.paths.key, 'utf8'),
+        cert: fs.readFileSync(config.tls.paths.cert, 'utf8')
+    };
+    server = https.createServer(credentials, app);
+} else{
+    server = http.createServer(app);
+}
 
-var io = require('socket.io')(httpsServer);
+server.listen(3000); //TODO config
 
-io.on('connect', function(socket){
-    socket.on('myPeer', function(opt){
-    	console.log('myPeer');
-	 var signal = opt.signal,
-            room = opt.room;
+var io = require('socket.io')(server);
 
-        if(signal && socket && room){
-            addAndConnectClient(signal, socket, room);
+io.on('connect', function (socket) {
+    socket.on('register', function(opt){
+        var room = opt.room,
+            signal = opt.signal || null;
+
+        if(socket && room){
+            addAndConnectClient(socket, room, signal);
         }
     });
 });
 
 var clients = {};
-var addAndConnectClient = function(signal, socket, room){
-    if(clients[room]){
+var addAndConnectClient = function (socket, room, signal) {
+    if (clients[room]) {
         // Oh there already is at least one client
 
-        if(Object.keys(clients[room]).length > 2){
+        if (Object.keys(clients[room]).length > 2) {
             // We do not connect more then two users
             console.log('already got 2 clients'); //TODO inform client
             return;
         }
 
-        if(!clients[room][socket.id]){
+        if (!clients[room][socket.id]) {
             // There already is the first, but not the second client, add it
-            clients[room][socket.id] = {signal: signal, socket: socket};
+            clients[room][socket.id] = {socket: socket, signal: signal};
         }
     } else {
         clients[room] = {};
-        clients[room][socket.id] = {signal: signal, socket: socket};
+        clients[room][socket.id] = {socket: socket, signal: signal};
     }
 
-    console.log(clients);
-
-    if(Object.keys(clients[room]).length == 2){
+    if (Object.keys(clients[room]).length == 2) {
         // Yay, we got both
 
-        console.log('both')
-        //clients[room][1].socket.emit('signal', clients[room][0].signal);
+        for(var key in clients[room]){
+            if(key != socket.id)
+                clients[room][socket.id].socket.emit('signal', clients[room][key]['signal']);
+        }
     }
 };

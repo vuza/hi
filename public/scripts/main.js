@@ -2,7 +2,8 @@ require.config({
     baseUrl: '/scripts/',
     paths: {
         io: 'vendor/bower/socket.io-client/socket.io',
-        Peer: 'vendor/bower/simple-peer/umd-version'
+        Peer: 'vendor/bower/simple-peer/umd-version',
+        jquery: 'vendor/bower/jquery/dist/jquery'
     },
     deps: ['client', 'helper'],
     callback: function (client, helper) {
