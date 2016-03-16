@@ -17,6 +17,8 @@ define(['io', 'Peer', 'config', 'jquery'], function (io, Peer, config, $) {
                     // After connection is build
                     peer.on('stream', function (stream) {
                         console.log(stream);
+                        //https://github.com/feross/lxjs-chat/blob/master/public/js/index.js#L100
+                        //https://github.com/feross/lxjs-chat/blob/master/public/js/peer.js#L126
                         var video = document.querySelector('video');
                         video.src = window.URL.createObjectURL(stream);
                         video.play();
