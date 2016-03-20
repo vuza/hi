@@ -12,14 +12,21 @@ define(['io', 'Peer', 'config', 'jquery'], function (io, Peer, config, $) {
 
             navigator.getUserMedia({audio: false, video: true},
                 function (stream) {
+                    //TODO do i need STUN or whatever server? http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/
+                    console.log(stream);
                     var peer = new Peer({initiator: initiator, stream: stream});
+
+                    // Show me
+                    var videoMe = $('video#me')[0];
+                    videoMe.src = window.URL.createObjectURL(stream);
+                    videoMe.play();
 
                     // After connection is build
                     peer.on('stream', function (stream) {
                         console.log(stream);
-                        var video = document.querySelector('video');
-                        video.src = window.URL.createObjectURL(stream);
-                        video.play();
+                        var videoHi = $('video#hi')[0];
+                        videoHi.src = window.URL.createObjectURL(stream);
+                        videoHi.play();
                     });
 
                     // Build connection
